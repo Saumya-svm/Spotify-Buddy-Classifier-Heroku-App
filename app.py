@@ -21,6 +21,7 @@ from collections import Counter
 from imblearn.over_sampling import SMOTE
 import sys
 import gspread
+import authorized_user
 
 
 # importing python file containing my credentials for using Spotify API
@@ -257,13 +258,7 @@ def run_streamlit():
         if submit_button:
             f = open('credentials.json')
             credentials = json.load(f)
-            gc, authorized_user = gspread.oauth_from_dict(credentials,{'refresh_token': '1//0g2h2Vn0uwzBGCgYIARAAGBASNwF-L9IrUR8sAzQgXXcg-ffc28Z2gNu7yT15mH27kzRcKk5F_fgVG28JoQkFWV5Hq5FfTi6vMKk',
- 'token_uri': 'https://oauth2.googleapis.com/token',
- 'client_id': '1054144430029-1hker5iq86m89h1p2ote3j45ea2d7513.apps.googleusercontent.com',
- 'client_secret': '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',
- 'scopes': ['https://www.googleapis.com/auth/spreadsheets',
-  'https://www.googleapis.com/auth/drive'],
- 'expiry': '2022-05-20T18:51:43Z'})
+            gc, authorized_user = gspread.oauth_from_dict(credentials,authorized_user)
             authorized_user = json.loads(authorized_user)
             sh = gc.open_by_key("1SarcN0JtXQ5lUIylZC-_vTuYeEhCv1XmDi0dxXZKHew")
             sheet = sh.get_worksheet(0)
@@ -272,6 +267,5 @@ def run_streamlit():
             dict['Message'] = message
             l = list(dict.values())
             sheet.append_row(l)
-            form_submission = form_submission.append(dict,ignore_index=True)
-            form_submission.to_csv('form_submissions.csv',mode='a',header=False)
+
 run_streamlit()
